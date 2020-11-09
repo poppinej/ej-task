@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "task.pool.max-pool-size",
+      "type": "java.lang.String",
+      "description": "Description for task.pool.max-pool-size."
+  }
+] }

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learn.ejtask.mapper.SysQuartzJobMapper">
+  <resultMap id="BaseResultMap" type="com.learn.ejtask.model.SysQuartzJob">
+    <id column="job_id" jdbcType="BIGINT" property="jobId" />
+    <result column="bean_name" jdbcType="VARCHAR" property="beanName" />
+    <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
+    <result column="is_pause" jdbcType="BIT" property="isPause" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="params" jdbcType="VARCHAR" property="params" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="person_in_charge" jdbcType="VARCHAR" property="personInCharge" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="sub_task" jdbcType="VARCHAR" property="subTask" />
+    <result column="pause_after_failure" jdbcType="BIT" property="pauseAfterFailure" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="ExtResultMap" type="com.learn.ejtask.model.ext.SysQuartzJobExt">
+    <id column="job_id" jdbcType="BIGINT" property="jobId" />
+    <result column="bean_name" jdbcType="VARCHAR" property="beanName" />
+    <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression" />
+    <result column="is_pause" jdbcType="BIT" property="isPause" />
+    <result column="job_name" jdbcType="VARCHAR" property="jobName" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="params" jdbcType="VARCHAR" property="params" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="person_in_charge" jdbcType="VARCHAR" property="personInCharge" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="sub_task" jdbcType="VARCHAR" property="subTask" />
+    <result column="pause_after_failure" jdbcType="BIT" property="pauseAfterFailure" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    job_id, bean_name, cron_expression, is_pause, job_name, method_name, params, description, 
+    person_in_charge, email, sub_task, pause_after_failure, create_by, update_by, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_quartz_job
+    where job_id = #{jobId,jdbcType=BIGINT}
+  </select>
+  <select id="getJobListByItem" resultType="com.learn.ejtask.model.SysQuartzJob">
+    select
+    <include refid="Base_Column_List"/>
+    from sys_quartz_job
+    where
+    1 = 1
+    <if test="jobDto.isPause != null">
+      and is_pause = jobDto.isPause
+    </if>
+  </select>
+    <select id="selectById" resultType="com.learn.ejtask.model.ext.SysQuartzJobExt" resultMap="ExtResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from sys_quartz_job
+      where job_id = #{jobId,jdbcType=BIGINT}
+    </select>
+    <select id="getJobExtListByItem" resultType="com.learn.ejtask.model.ext.SysQuartzJobExt" resultMap="ExtResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from sys_quartz_job
+      where
+      1 = 1
+      <if test="jobDto.isPause != null">
+        and is_pause = #{jobDto.isPause}
+      </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_quartz_job
+    where job_id = #{jobId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.learn.ejtask.model.SysQuartzJob">
+    insert into sys_quartz_job (job_id, bean_name, cron_expression, 
+      is_pause, job_name, method_name, 
+      params, description, person_in_charge, 
+      email, sub_task, pause_after_failure, 
+      create_by, update_by, create_time, 
+      update_time)
+    values (#{jobId,jdbcType=BIGINT}, #{beanName,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, 
+      #{isPause,jdbcType=BIT}, #{jobName,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, 
+      #{params,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{personInCharge,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{subTask,jdbcType=VARCHAR}, #{pauseAfterFailure,jdbcType=BIT}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.learn.ejtask.model.SysQuartzJob">
+    insert into sys_quartz_job
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobId != null">
+        job_id,
+      </if>
+      <if test="beanName != null">
+        bean_name,
+      </if>
+      <if test="cronExpression != null">
+        cron_expression,
+      </if>
+      <if test="isPause != null">
+        is_pause,
+      </if>
+      <if test="jobName != null">
+        job_name,
+      </if>
+      <if test="methodName != null">
+        method_name,
+      </if>
+      <if test="params != null">
+        params,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="personInCharge != null">
+        person_in_charge,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="subTask != null">
+        sub_task,
+      </if>
+      <if test="pauseAfterFailure != null">
+        pause_after_failure,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jobId != null">
+        #{jobId,jdbcType=BIGINT},
+      </if>
+      <if test="beanName != null">
+        #{beanName,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression != null">
+        #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="isPause != null">
+        #{isPause,jdbcType=BIT},
+      </if>
+      <if test="jobName != null">
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null">
+        #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null">
+        #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="personInCharge != null">
+        #{personInCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="subTask != null">
+        #{subTask,jdbcType=VARCHAR},
+      </if>
+      <if test="pauseAfterFailure != null">
+        #{pauseAfterFailure,jdbcType=BIT},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.learn.ejtask.model.SysQuartzJob">
+    update sys_quartz_job
+    <set>
+      <if test="beanName != null">
+        bean_name = #{beanName,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression != null">
+        cron_expression = #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="isPause != null">
+        is_pause = #{isPause,jdbcType=BIT},
+      </if>
+      <if test="jobName != null">
+        job_name = #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="methodName != null">
+        method_name = #{methodName,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null">
+        params = #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="personInCharge != null">
+        person_in_charge = #{personInCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="subTask != null">
+        sub_task = #{subTask,jdbcType=VARCHAR},
+      </if>
+      <if test="pauseAfterFailure != null">
+        pause_after_failure = #{pauseAfterFailure,jdbcType=BIT},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where job_id = #{jobId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.learn.ejtask.model.SysQuartzJob">
+    update sys_quartz_job
+    set bean_name = #{beanName,jdbcType=VARCHAR},
+      cron_expression = #{cronExpression,jdbcType=VARCHAR},
+      is_pause = #{isPause,jdbcType=BIT},
+      job_name = #{jobName,jdbcType=VARCHAR},
+      method_name = #{methodName,jdbcType=VARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      person_in_charge = #{personInCharge,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      sub_task = #{subTask,jdbcType=VARCHAR},
+      pause_after_failure = #{pauseAfterFailure,jdbcType=BIT},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where job_id = #{jobId,jdbcType=BIGINT}
+  </update>
+</mapper>
