@@ -1,5 +1,6 @@
 package com.learn.ejtask.utils;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.learn.ejtask.exception.BadRequestException;
 import com.learn.ejtask.model.SysQuartzJob;
 import com.learn.ejtask.model.ext.SysQuartzJobExt;
@@ -42,11 +43,18 @@ public class QuartzManage {
 
             ((CronTriggerImpl)cronTrigger).setStartTime(new Date());
 
+            CronTrigger trigger = (CronTrigger) scheduler.getTrigger(cronTrigger.getKey());
+           //解决scheduler中出现重复任务的情况
+            if(!ObjectUtil.isNull(trigger)){
+
+                scheduler.deleteJob(jobDetail.getKey());
+
+            }
             scheduler.scheduleJob(jobDetail,cronTrigger);
 
-            if(sysQuartzJob.getIsPause()){
-                pauseJob(sysQuartzJob);
-            }
+//            if(sysQuartzJob.getIsPause()){
+//                pauseJob(sysQuartzJob);
+//            }
         } catch (Exception e){
             log.error("更新定时任务失败",e);
             throw new BadRequestException("更新定时任务失败");
@@ -99,6 +107,18 @@ public class QuartzManage {
         }catch (Exception e){
             log.error("恢复定时任务失败",e);
             throw new BadRequestException("恢复定时任务失败");
+        }
+    }
+
+    public void deleteJob(SysQuartzJobExt sysQuartzJobExt){
+
+        try{
+            JobKey jobKey = JobKey.jobKey(JOB_NAME+ sysQuartzJobExt.getJobId());
+            scheduler.pauseJob(jobKey);
+            scheduler.deleteJob(jobKey);
+        }catch (Exception e){
+            log.error("删除定时任务失败",e);
+            throw new BadRequestException("删除定时任务失败");
         }
     }
 }

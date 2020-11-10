@@ -53,7 +53,7 @@ public class ExecutionJob extends QuartzJobBean {
             future.get();
             long times = System.currentTimeMillis() - startTime;
 
-            if(StringUtils.isNotBlank(uuid)){
+            if(StringUtils.isNotEmpty(uuid)){
 
                 redisUtils.set(uuid,true);
             }
@@ -85,14 +85,6 @@ public class ExecutionJob extends QuartzJobBean {
 
             }
         }
-
-
-
-
-
-
-
-
 
     }
 }
